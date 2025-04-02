@@ -45,56 +45,56 @@ do
     fi
 done
 
+# test
+# # ## Main Script Starts from here
+# # # File_with_Dataset_Names="/Volumes/pr_ohlendorf/fMRI/Project1_CBV_fMRI_NJ/RawData/DatasetNames.txt"
+# # File_with_Dataset_Names="/Users/njain/Desktop/data.txt"
 
-# ## Main Script Starts from here
-# # File_with_Dataset_Names="/Volumes/pr_ohlendorf/fMRI/Project1_CBV_fMRI_NJ/RawData/DatasetNames.txt"
-# File_with_Dataset_Names="/Users/njain/Desktop/data.txt"
+# # indices=(1 2) #enter the index number of the file name that you would like to analyse
 
-# indices=(1 2) #enter the index number of the file name that you would like to analyse
-
-# for datasets in "${indices[@]}"; do
+# # for datasets in "${indices[@]}"; do
     
-#     DatasetName=$(awk -F "\"*,\"*" -v var="$datasets" 'NR == var {print $1}' $File_with_Dataset_Names)
-#     echo "Dataset Currently Being Analysed is": $DatasetName
+# #     DatasetName=$(awk -F "\"*,\"*" -v var="$datasets" 'NR == var {print $1}' $File_with_Dataset_Names)
+# #     echo "Dataset Currently Being Analysed is": $DatasetName
 
-#     #Locate the source of Raw Data on the server, this needs to be changed by the user based on the paths defined in their system#
-#     Raw_Data_Path="/Volumes/pr_ohlendorf/fMRI/RawData/Project_MMP9_NJ_MP/test_animals/$DatasetName"
-#     Analysed_Data_Path="/Volumes/pr_ohlendorf/fMRI/AnalysedData/Project_MMP9_NJ_MP/test_animals/$DatasetName"
+# #     #Locate the source of Raw Data on the server, this needs to be changed by the user based on the paths defined in their system#
+# #     Raw_Data_Path="/Volumes/pr_ohlendorf/fMRI/RawData/Project_MMP9_NJ_MP/test_animals/$DatasetName"
+# #     Analysed_Data_Path="/Volumes/pr_ohlendorf/fMRI/AnalysedData/Project_MMP9_NJ_MP/test_animals/$DatasetName"
 
-#     # Raw_Data_Path="/Users/njain/Desktop/RawData/$DatasetName"
-#     # Analysed_Data_Path="/Users/njain/Desktop/AnalysedData/$DatasetName"
+# #     # Raw_Data_Path="/Users/njain/Desktop/RawData/$DatasetName"
+# #     # Analysed_Data_Path="/Users/njain/Desktop/AnalysedData/$DatasetName"
 
-#     LOG_DIR="$Raw_Data_Path/Data_Analysis_log" # Define the log directory where you want to store the script.
-#     user=$(whoami)
-#     log_execution "$LOG_DIR" || exit 1
+# #     LOG_DIR="$Raw_Data_Path/Data_Analysis_log" # Define the log directory where you want to store the script.
+# #     user=$(whoami)
+# #     log_execution "$LOG_DIR" || exit 1
 
-#     CHECK_FILE_EXISTENCE $Analysed_Data_Path
+# #     CHECK_FILE_EXISTENCE $Analysed_Data_Path
    
-#     cd $Raw_Data_Path
-#     pwd
-#     for runnames in *; do #31.07.2024 instead of adding run numbers the code picks all the run numbers automatically located in the folder
-#     # if [[ $runname =~ ^[0-9]+$ ]]; then
+# #     cd $Raw_Data_Path
+# #     pwd
+# #     for runnames in *; do #31.07.2024 instead of adding run numbers the code picks all the run numbers automatically located in the folder
+# #     # if [[ $runname =~ ^[0-9]+$ ]]; then
        
-#         echo ""
-#         echo ""
-#         echo "Currently Analysing Run Number: $runnames"
-#         echo ""
-#         echo ""
+# #         echo ""
+# #         echo ""
+# #         echo "Currently Analysing Run Number: $runnames"
+# #         echo ""
+# #         echo ""
 
-#         Raw_Data_Path_Run="$Raw_Data_Path/$runnames"
+# #         Raw_Data_Path_Run="$Raw_Data_Path/$runnames"
             
-#         FUNC_PARAM_EXTARCT $Raw_Data_Path_Run
+# #         FUNC_PARAM_EXTARCT $Raw_Data_Path_Run
 
-#         word_to_check="1_Localizer"
+# #         word_to_check="1_Localizer"
                 
-#         if echo "$SequenceName" | grep -q "$word_to_check"; then
-#             echo "This data is acquired using '$word_to_check'. This will not be analyzed."
+# #         if echo "$SequenceName" | grep -q "$word_to_check"; then
+# #             echo "This data is acquired using '$word_to_check'. This will not be analyzed."
             
-#         else
-#             echo "This data is acquired using $SequenceName"
+# #         else
+# #             echo "This data is acquired using $SequenceName"
 
-#             CHECK_FILE_EXISTENCE "$Analysed_Data_Path/$runnames$SequenceName"
-#             cd $Analysed_Data_Path/$runnames''$SequenceName
+# #             CHECK_FILE_EXISTENCE "$Analysed_Data_Path/$runnames$SequenceName"
+# #             cd $Analysed_Data_Path/$runnames''$SequenceName
 
 #             BRUKER_to_NIFTI $Raw_Data_Path $runnames $Raw_Data_Path/$runnames/method
 
