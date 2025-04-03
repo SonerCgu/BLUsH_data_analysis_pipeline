@@ -58,24 +58,24 @@ do
         CHECK_FILE_EXISTENCE "$Path_Analysed_Data/$run_number$SequenceName"
         cd $Path_Analysed_Data/$run_number''$SequenceName
         
-        # BRUKER_to_NIFTI $datapath $run_number $datapath/$run_number/method
-        # echo "This data is acquired using $SequenceName"
+        BRUKER_to_NIFTI $datapath $run_number $datapath/$run_number/method
+        echo "This data is acquired using $SequenceName"
 
-        # log_function_execution "$LOG_DIR" "Motion Correction using AFNI executed on Run Number $run_number acquired using $SequenceName"|| exit 1
-        # MOTION_CORRECTION $MiddleVolume G1_cp.nii.gz mc_func
+        log_function_execution "$LOG_DIR" "Motion Correction using AFNI executed on Run Number $run_number acquired using $SequenceName"|| exit 1
+        MOTION_CORRECTION $MiddleVolume G1_cp.nii.gz mc_func
                     
-        # log_function_execution "$LOG_DIR" "Checked for presence of spikes in the data on Run Number $run_number acquired using $SequenceName"|| exit 1
-        # CHECK_SPIKES mc_func+orig
+        log_function_execution "$LOG_DIR" "Checked for presence of spikes in the data on Run Number $run_number acquired using $SequenceName"|| exit 1
+        CHECK_SPIKES mc_func+orig
 
-        # log_function_execution "$LOG_DIR" "Temporal SNR estimated on Run Number $run_number acquired using $SequenceName"|| exit 1
-        # TEMPORAL_SNR_using_AFNI mc_func+orig
+        log_function_execution "$LOG_DIR" "Temporal SNR estimated on Run Number $run_number acquired using $SequenceName"|| exit 1
+        TEMPORAL_SNR_using_AFNI mc_func+orig
 
-        # log_function_execution "$LOG_DIR" "Smoothing using FSL executed on Run Number $run_number acquired using $SequenceName"|| exit 1
-        # SMOOTHING_using_FSL mc_func.nii.gz
+        log_function_execution "$LOG_DIR" "Smoothing using FSL executed on Run Number $run_number acquired using $SequenceName"|| exit 1
+        SMOOTHING_using_FSL mc_func.nii.gz
  
         log_function_execution "$LOG_DIR" "Signal Change Map created for Run Number $run_number acquired using $SequenceName"|| exit 1
         SIGNAL_CHANGE_MAPS mc_func.nii.gz 50 250 $datapath/$run_number 5 5 mean_mc_func.nii.gz
-exit
+
     fi
 done
 
