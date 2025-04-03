@@ -11,4 +11,5 @@ source ../fMRI_analysis_pipeline/activation_maps.sh # to map areas of activation
 source ../fMRI_analysis_pipeline/outlier_count.sh #14.08.2024 new function to perfom slice timing correction and outlier estimate before and after slice timing correction
 source ../fMRI_analysis_pipeline/video_making.sh #19.08.2024 new function to make videos of the signal change maps
 source ../fMRI_analysis_pipeline/func_parameters_extraction.sh #07.11.2024 new function to extract parameters for fMRI analysis
-
+source ../fMRI_analysis_pipeline/bash_log_create.sh
+source ../fMRI_analysis_pipeline/Signal_Change_Map.sh
