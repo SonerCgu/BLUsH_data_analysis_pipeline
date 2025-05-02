@@ -97,7 +97,7 @@ do
         log_function_execution "$LOG_DIR" "Signal Change Map created for Run Number $run_number acquired using $SequenceName" || exit 1
   
         if [[ "$SequenceName" == *"functionalEPI"* ]]; then
-            run_if_missing "$datapath/$run_number/Signal_Change_Map.nii.gz" -- \
+            run_if_missing "Signal_Change_Map.nii.gz" -- \
             SIGNAL_CHANGE_MAPS mc_func.nii.gz 100 550 "$datapath/$run_number" 5 5 mean_mc_func.nii.gz
         elif [[ "$SequenceName" == *"FLASH"* ]]; then
             run_if_missing "$datapath/$run_number/Signal_Change_Map.nii.gz" -- \
