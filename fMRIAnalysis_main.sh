@@ -17,7 +17,7 @@ cd $root_location/RawData
 # xlsx2csv Animal_Experiments_Sequences.xlsx Animal_Experiments_Sequences.csv
 
 # Read the CSV file line by line, skipping the header
-awk -F ',' 'NR>2 {print $0}' "Animal_Experiments_Sequences_v4.csv" | while IFS=',' read -r col1 dataset_name project_name sub_project_name structural_name functional_name _
+awk -F ',' 'NR==40 {print $0}' "Animal_Experiments_Sequences_v4.csv" | while IFS=',' read -r col1 dataset_name project_name sub_project_name structural_name functional_name roi_left roi_right _
 do
     # Trim any extra whitespace
     project_name=$(echo "$project_name" | xargs)
@@ -28,8 +28,8 @@ do
         export Dataset_Name="$dataset_name"
         export structural_run="$structural_name"
         export run_number="$functional_name"
-        
-        # echo $Structural_Data
+       
+        # echo $structural_run
 
         Path_Raw_Data="$root_location/RawData/$project_name/$sub_project_name"
         Path_Analysed_Data="$root_location/AnalysedData/$project_name/$sub_project_name/$Dataset_Name"
@@ -65,12 +65,11 @@ do
 
         #conversion for structural data
         FUNC_PARAM_EXTARCT $datapath/$structural_run
-        echo $SequenceName
-       
+               
         CHECK_FILE_EXISTENCE "$Path_Analysed_Data/$structural_run""$SequenceName"
         cd $Path_Analysed_Data/$structural_run''$SequenceName
 
-        run_if_missing "G1_cp.nii.gz" -- BRUKER_to_NIFTI "$datapath" "$structural_run" "$datapath/$structural_runs/method"
+        run_if_missing "G1_cp.nii.gz" -- BRUKER_to_NIFTI "$datapath" "$structural_run" "$datapath/$structural_run/method"
         echo "This data is acquired using $SequenceName"
 
         #conversion for functional data
@@ -92,18 +91,28 @@ do
         run_if_missing  "tSNR_mc_func.nii.gz" "tSNR_mc_func+orig.HEAD" "tSNR_mc_func+orig.BRIK" -- TEMPORAL_SNR_using_AFNI mc_func+orig
   
         log_function_execution "$LOG_DIR" "Smoothing using FSL executed on Run Number $run_number acquired using $SequenceName" || exit 1
-        run_if_missing  "sm_mc_func.nii.gz" -- TSMOOTHING_using_FSL mc_func.nii.gz
+        run_if_missing  "sm_mc_func.nii.gz" -- SMOOTHING_using_FSL mc_func.nii.gz
 
         log_function_execution "$LOG_DIR" "Signal Change Map created for Run Number $run_number acquired using $SequenceName" || exit 1
   
         if [[ "$SequenceName" == *"functionalEPI"* ]]; then
             run_if_missing "Signal_Change_Map.nii.gz" -- \
-            SIGNAL_CHANGE_MAPS mc_func.nii.gz 100 550 "$datapath/$run_number" 5 5 mean_mc_func.nii.gz
+            SIGNAL_CHANGE_MAPS mc_func.nii.gz 50 250 "$datapath/$run_number" 5 5 mean_mc_func.nii.gz
         elif [[ "$SequenceName" == *"FLASH"* ]]; then
             run_if_missing "$datapath/$run_number/Signal_Change_Map.nii.gz" -- \
-            SIGNAL_CHANGE_MAPS mc_func.nii.gz 5 25 "$datapath/$run_number" 5 5 mean_mc_func.nii.gz
+            SIGNAL_CHANGE_MAPS mc_func.nii.gz 5 12 "$datapath/$run_number" 5 5 mean_mc_func.nii.gz
         else
             echo "Unknown sequence type: $SequenceName — skipping SIGNAL_CHANGE_MAPS."
         fi
+
+
+
+        #extracting time course for voxel by voxel on each side
+
+        EXTRACT_VOXELS "$roi_left" "left"
+        cd ..
+        EXTRACT_VOXELS "$roi_right" "right"
+
     fi
 done
+

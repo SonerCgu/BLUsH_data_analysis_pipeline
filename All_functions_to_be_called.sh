@@ -14,3 +14,5 @@ source ../fMRI_analysis_pipeline/func_parameters_extraction.sh #07.11.2024 new f
 source ../fMRI_analysis_pipeline/bash_log_create.sh
 source ../fMRI_analysis_pipeline/Signal_Change_Map.sh
 source ../fMRI_analysis_pipeline/missing_run.sh
+source ../fMRI_analysis_pipeline/extract_voxels.sh
+bash ../fMRI_analysis_pipeline/toolbox_name.sh
