@@ -17,7 +17,7 @@ cd $root_location/RawData
 # xlsx2csv Animal_Experiments_Sequences.xlsx Animal_Experiments_Sequences.csv
 
 # Read the CSV file line by line, skipping the header
-awk -F ',' 'NR==40 {print $0}' "Animal_Experiments_Sequences_v4.csv" | while IFS=',' read -r col1 dataset_name project_name sub_project_name structural_name functional_name roi_left roi_right _
+awk -F ',' 'NR>2{print $0}' "Animal_Experiments_Sequences_v4.csv" | while IFS=',' read -r col1 dataset_name project_name sub_project_name structural_name functional_name roi_left roi_right _
 do
     # Trim any extra whitespace
     project_name=$(echo "$project_name" | xargs)
@@ -28,7 +28,7 @@ do
         export Dataset_Name="$dataset_name"
         export structural_run="$structural_name"
         export run_number="$functional_name"
-       
+
         # echo $structural_run
 
         Path_Raw_Data="$root_location/RawData/$project_name/$sub_project_name"
@@ -61,6 +61,7 @@ do
         LOG_DIR="$datapath/Data_Analysis_log" # Define the log directory where you want to store the script.
         user=$(whoami)
         log_execution "$LOG_DIR" || exit 1
+
 
 
         #conversion for structural data
@@ -100,7 +101,7 @@ do
             SIGNAL_CHANGE_MAPS mc_func.nii.gz 50 250 "$datapath/$run_number" 5 5 mean_mc_func.nii.gz
         elif [[ "$SequenceName" == *"FLASH"* ]]; then
             run_if_missing "$datapath/$run_number/Signal_Change_Map.nii.gz" -- \
-            SIGNAL_CHANGE_MAPS mc_func.nii.gz 5 12 "$datapath/$run_number" 5 5 mean_mc_func.nii.gz
+            SIGNAL_CHANGE_MAPS mc_func.nii.gz 5 12 "$datapath/$run_number" 10 5 mean_mc_func.nii.gz
         else
             echo "Unknown sequence type: $SequenceName — skipping SIGNAL_CHANGE_MAPS."
         fi
@@ -109,10 +110,11 @@ do
 
         #extracting time course for voxel by voxel on each side
 
-        EXTRACT_VOXELS "$roi_left" "left"
-        cd ..
-        EXTRACT_VOXELS "$roi_right" "right"
+        # EXTRACT_VOXELS "$roi_left" "left"
+        # cd ..
+        # EXTRACT_VOXELS "$roi_right" "right"
 
     fi
 done
+
 
